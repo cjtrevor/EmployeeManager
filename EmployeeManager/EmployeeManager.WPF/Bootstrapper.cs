@@ -30,6 +30,8 @@ namespace EmployeeManager.WPF
             _container.RegisterPerRequest(typeof(IShellViewModel), "", typeof(ShellViewModel));
             _container.RegisterPerRequest(typeof(IEmployeeService), "", typeof(EmployeeService));
             _container.RegisterPerRequest(typeof(IDataValidator), "", typeof(DataValidator));
+            _container.RegisterPerRequest(typeof(IConfigurationService), "", typeof(ConfigurationService));
+            _container.RegisterPerRequest(typeof(ISerializeService), "", typeof(SerializeService));
 
         }
 

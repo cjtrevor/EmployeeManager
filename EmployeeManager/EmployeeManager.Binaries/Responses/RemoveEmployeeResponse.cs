@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace EmployeeManager.Binaries.Responses
 {
-    public class RemoveUserResponse:ResponseBase
+    public class RemoveEmployeeResponse:ResponseBase
     {
+        public RemoveEmployeeResponse()
+        {
+            base.Success = false;
+        }
     }
 }

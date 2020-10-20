@@ -7,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace EmployeeManager.Binaries.Responses
 {
-    public class GetUserResponse: ResponseBase
+    public class GetEmployeeResponse : ResponseBase
     {
+        public GetEmployeeResponse()
+        {
+            base.Success = false;
+        }
         public ResponseMeta meta { get; set; }
-        public List<Employee> data{ get; set; }
+        public List<Employee> data { get; set; }
     }
 }

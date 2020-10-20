@@ -14,9 +14,12 @@ namespace EmployeeManager.Binaries.Services
 {
     public class RestApiService : IRestApiService
     {
+        private IConfigurationService _configurationService;
         private HttpClient ApiClient { get; set; }
-        public RestApiService()
+        public RestApiService(IConfigurationService configurationService)
         {
+            _configurationService = configurationService;
+
             Initialize();
         }
         private void Initialize()
@@ -24,27 +27,27 @@ namespace EmployeeManager.Binaries.Services
             ApiClient = new HttpClient();
             ApiClient.DefaultRequestHeaders.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", ConfigurationManager.AppSettings["apiAuth"]);
-            ApiClient.BaseAddress = new Uri(ConfigurationManager.AppSettings["api"]);
+            ApiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _configurationService.GetConfigurationValueString("apiAuth"));
+            ApiClient.BaseAddress = new Uri(_configurationService.GetConfigurationValueString("api"));
         }
 
-        public async Task<GetUserResponse> GetEmployees(int PageNumber)
+        public async Task<GetEmployeeResponse> GetEmployees(int PageNumber)
         {
-            using (HttpResponseMessage response = await ApiClient.GetAsync("/public-api/users"))
+            using (HttpResponseMessage response = await ApiClient.GetAsync("/public-api/users?page=" + PageNumber))
             {
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    GetUserResponse result = JsonConvert.DeserializeObject<GetUserResponse>(content);
+                    GetEmployeeResponse result = JsonConvert.DeserializeObject<GetEmployeeResponse>(content);
                     result.Success = true;
                     return result;
                 }
 
-                return new GetUserResponse() { Success = false, FailureReason = response.ReasonPhrase };
+                return new GetEmployeeResponse() { Success = false, FailureReason = response.ReasonPhrase };
             }
         }
 
-        public async Task<SaveUserResponse> AddEmployee(Employee employee)
+        public async Task<SaveEmployeeResponse> AddEmployee(Employee employee)
         {
             var content = new StringContent(JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json");
             using (HttpResponseMessage response = await ApiClient.PostAsync("/public-api/users", content))
@@ -52,16 +55,16 @@ namespace EmployeeManager.Binaries.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    SaveUserResponse result = JsonConvert.DeserializeObject<SaveUserResponse>(responseContent);
+                    SaveEmployeeResponse result = JsonConvert.DeserializeObject<SaveEmployeeResponse>(responseContent);
                     result.Success = true;
                     return result;
                 }
 
-                return new SaveUserResponse() { Success = false, FailureReason = response.ReasonPhrase };
+                return new SaveEmployeeResponse() { Success = false, FailureReason = response.ReasonPhrase };
             }
         }
 
-        public async Task<SaveUserResponse> UpdateEmployee(Employee employee)
+        public async Task<SaveEmployeeResponse> UpdateEmployee(Employee employee)
         {
             var content = new StringContent(JsonConvert.SerializeObject(employee), Encoding.UTF8, "application/json");
             using (HttpResponseMessage response = await ApiClient.PutAsync("/public-api/users/" + employee.id, content))
@@ -69,32 +72,50 @@ namespace EmployeeManager.Binaries.Services
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-                    SaveUserResponse result = JsonConvert.DeserializeObject<SaveUserResponse>(responseContent);
+                    SaveEmployeeResponse result = JsonConvert.DeserializeObject<SaveEmployeeResponse>(responseContent);
                     result.Success = true;
                     return result;
                 }
 
-                return new SaveUserResponse() { Success = false, FailureReason = response.ReasonPhrase };
+                return new SaveEmployeeResponse() { Success = false, FailureReason = response.ReasonPhrase };
             }
         }
 
-        public async Task<RemoveUserResponse> RemoveEmployee(int employeeID)
+        public async Task<RemoveEmployeeResponse> RemoveEmployee(int employeeID)
         {
             using (HttpResponseMessage response = await ApiClient.DeleteAsync("/public-api/users/" + employeeID))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    return new RemoveUserResponse() { Success = true };
+                    return new RemoveEmployeeResponse() { Success = true };
                 }
 
-                return new RemoveUserResponse() { Success = false, FailureReason = response.ReasonPhrase };
+                return new RemoveEmployeeResponse() { Success = false, FailureReason = response.ReasonPhrase };
             }
         }
 
-        public async Task<GetUserResponse> SearchEmployees(int PageNumber, string Name, string Gender, string Status)
+        public async Task<GetEmployeeResponse> SearchEmployees(int PageNumber, string Name, string Gender, string Status)
+        {
+            string uri = GetSearchUri(PageNumber, Name, Gender, Status);
+            using (HttpResponseMessage response = await ApiClient.GetAsync(uri))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    GetEmployeeResponse result = JsonConvert.DeserializeObject<GetEmployeeResponse>(content);
+                    result.Success = true;
+                    return result;
+                }
+
+                return new GetEmployeeResponse() { Success = false, FailureReason = response.ReasonPhrase };
+            }
+        }
+        private string GetSearchUri(int PageNumber, string Name, string Gender, string Status)
         {
             string uri = $"/public-api/users?";
-            
+
+            if (PageNumber > 0)
+                uri += $"page={PageNumber}&";
             if (!string.IsNullOrEmpty(Name))
                 uri += $"name={Name}&";
             if (Gender != "No Filter")
@@ -102,20 +123,7 @@ namespace EmployeeManager.Binaries.Services
             if (Status != "No Filter")
                 uri += $"status={Status}&";
 
-            uri = uri.Substring(0, uri.Length - 1);
-
-            using (HttpResponseMessage response = await ApiClient.GetAsync(uri))
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    GetUserResponse result = JsonConvert.DeserializeObject<GetUserResponse>(content);
-                    result.Success = true;
-                    return result;
-                }
-
-                return new GetUserResponse() { Success = false, FailureReason = response.ReasonPhrase };
-            }
+            return uri.Substring(0, uri.Length - 1);
         }
     }
 }

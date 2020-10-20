@@ -15,26 +15,26 @@ namespace EmployeeManager.Binaries.Services
         {
             _restApiService = restApiService;
         }
-        public async Task<SaveUserResponse> AddEmployee(Employee employee)
+        public async Task<SaveEmployeeResponse> AddEmployee(Employee employee)
         {
             return await _restApiService.AddEmployee(employee);
         }
 
-        public async Task<GetUserResponse> GetEmployees(int PageNumber)
+        public async Task<GetEmployeeResponse> GetEmployees(int PageNumber)
         {
             return await _restApiService.GetEmployees(PageNumber);
         }
 
-        public async Task<RemoveUserResponse> RemoveEmployee(int employeeID)
+        public async Task<RemoveEmployeeResponse> RemoveEmployee(int employeeID)
         {
             return await _restApiService.RemoveEmployee(employeeID);
         }
 
-        public async Task<GetUserResponse> SearchEmployees(int PageNumber, string Name, string Gender, string Status)
+        public async Task<GetEmployeeResponse> SearchEmployees(int PageNumber, string Name, string Gender, string Status)
         {
             return await _restApiService.SearchEmployees(PageNumber, Name, Gender, Status);
         }
-        public async Task<SaveUserResponse> UpdateEmployee(Employee employee)
+        public async Task<SaveEmployeeResponse> UpdateEmployee(Employee employee)
         {
             return await _restApiService.UpdateEmployee(employee);
         }

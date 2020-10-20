@@ -19,5 +19,7 @@ namespace EmployeeManager.WPF.ViewModels
         void Search();
 
         void Export();
+        void Previous();
+        void Next();
     }
 }

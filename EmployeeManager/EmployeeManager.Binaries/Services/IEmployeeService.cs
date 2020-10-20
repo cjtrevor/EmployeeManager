@@ -10,10 +10,10 @@ namespace EmployeeManager.Binaries.Services
 {
     public interface IEmployeeService
     {
-        Task<GetUserResponse> GetEmployees(int PageNumber);
-        Task<SaveUserResponse> AddEmployee(Employee employee);
-        Task<SaveUserResponse> UpdateEmployee(Employee employee);
-        Task<RemoveUserResponse> RemoveEmployee(int employeeID); 
-        Task<GetUserResponse> SearchEmployees(int PageNumber, string Name, string Gender, string Status);
+        Task<GetEmployeeResponse> GetEmployees(int PageNumber);
+        Task<SaveEmployeeResponse> AddEmployee(Employee employee);
+        Task<SaveEmployeeResponse> UpdateEmployee(Employee employee);
+        Task<RemoveEmployeeResponse> RemoveEmployee(int employeeID); 
+        Task<GetEmployeeResponse> SearchEmployees(int PageNumber, string Name, string Gender, string Status);
     }
 }

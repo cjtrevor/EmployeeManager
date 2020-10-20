@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace EmployeeManager.Binaries.Responses
 {
-    public class SaveUserResponse: ResponseBase
+    public class SaveEmployeeResponse : ResponseBase
     {
+        public SaveEmployeeResponse()
+        {
+            base.Success = false;
+        }
         public Employee data { get; set; }
     }
 }

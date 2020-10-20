@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManager.WPF", "Empl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManager.Binaries", "EmployeeManager.Binaries\EmployeeManager.Binaries.csproj", "{F41A798C-0175-4307-A8A1-E1B816BD18BB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManager.UnitTests", "EmployeeManager.UnitTests\EmployeeManager.UnitTests.csproj", "{AC967BA3-CBD8-4434-ACFA-0F58C3D164F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{F41A798C-0175-4307-A8A1-E1B816BD18BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F41A798C-0175-4307-A8A1-E1B816BD18BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F41A798C-0175-4307-A8A1-E1B816BD18BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC967BA3-CBD8-4434-ACFA-0F58C3D164F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC967BA3-CBD8-4434-ACFA-0F58C3D164F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC967BA3-CBD8-4434-ACFA-0F58C3D164F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC967BA3-CBD8-4434-ACFA-0F58C3D164F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
